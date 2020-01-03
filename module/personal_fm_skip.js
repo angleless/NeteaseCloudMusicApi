@@ -3,6 +3,6 @@
 module.exports = (query, request) => {
   return request(
     'POST', `https://music.163.com/eapi/v1/radio/skip`, {},
-    {crypto: 'weapi', cookie: query.cookie, proxy: query.proxy}
+    {crypto: 'eapi', cookie: query.cookie, proxy: query.proxy}
   )
 }
