@@ -48,7 +48,7 @@ app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({extended: false}))
 
 // cache
-app.use(cache('2 minutes', ((req, res) => res.statusCode === 200)))
+// app.use(cache('2 minutes', ((req, res) => res.statusCode === 200)))
 
 // static
 app.use(express.static(path.join(__dirname, 'public')))
@@ -63,12 +63,14 @@ const special = {
 fs.readdirSync(path.join(__dirname, 'module')).reverse().forEach(file => {
   if(!file.endsWith('.js')) return
   let route = (file in special) ? special[file] : '/' + file.replace(/\.js$/i, '').replace(/_/g, '/')
+  if(route.indexOf('personal') > -1) console.log(route)
   let question = require(path.join(__dirname, 'module', file))
-
+ 
   app.use(route, (req, res) => {
     let query = Object.assign({}, req.query, req.body, {cookie: req.cookies})
     question(query, request)
       .then(answer => {
+        console.log(req.originalUrl)
         console.log('[OK]', decodeURIComponent(req.originalUrl))
         res.append('Set-Cookie', answer.cookie)
         res.status(answer.status).send(answer.body)
