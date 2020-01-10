@@ -24,7 +24,7 @@ app.use((req, res, next) => {
   if(req.path !== '/' && !req.path.includes('.')){
     res.set({
       'Access-Control-Allow-Credentials': true,
-      'Access-Control-Allow-Origin': '*',
+      'Access-Control-Allow-Origin': req.headers.origin || '*',
       'Access-Control-Allow-Headers': 'X-Requested-With,Content-Type',
       'Access-Control-Allow-Methods': 'PUT,POST,GET,DELETE,OPTIONS',
       'Content-Type': 'application/json; charset=utf-8'
@@ -88,7 +88,7 @@ const port = process.env.PORT || 3000
 const host = process.env.HOST || ''
 
 app.server = app.listen(port, host, () => {
-  console.log(`server running @ http://${host ? host : '47.98.146.129'}:${port}`)
+  console.log(`server running @ http://${host ? host : 'localhost'}:${port}`)
 })
 
 module.exports = app
